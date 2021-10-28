@@ -1,9 +1,24 @@
 <html>
   <body>
     <h1>Adicionar Aluno</h1>
-    <form method="POST" action="/alunos">
-        <input type="number" name="idAluno">
-        <input type="text" name="name">
+    <form method="POST" action="">
+        <input type="number" name="idAluno" required> 
+        <div>
+            <label>Nome</label>
+            <input type="text" name="name" placeholder="Seu nome" minlength="10" required>
+        </div>
+        <div>
+            <label>Cpf</label>
+            <input type="text" name="cpf" maxlength="14" minlength="14" placeholder="Utilizar pontos e traço ( 111.111.111-11)" required>
+        </div>
+        <div>
+            <label>Endereço</label>
+            <input type="text" name="endereco">
+        </div>
+        <div>
+            <label>Quantidade de modalidades</label>
+            <input type="number" name="qtdeModalidades" min="1" max="4" value="1">
+        </div>
         <input type="submit" value="Add">
     </form>
 
