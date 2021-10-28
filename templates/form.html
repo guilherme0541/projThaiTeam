@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <h1>Adicionar Aluno</h1>
+    <form method="POST" action="/alunos">
+        <input type="number" name="idAluno">
+        <input type="text" name="name">
+        <input type="submit" value="Add">
+    </form>
+
+    <h1>Alunos</h1>
+    {% for aluno in alunos %}
+      <p>id : {{aluno.idAluno}} - nome : {{aluno.name}}</p>
+    {% endfor %}
+  </body>
+</html>
