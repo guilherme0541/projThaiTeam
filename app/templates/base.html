@@ -47,10 +47,12 @@
                         </ul>
                     </div>
                 </nav>
+                {% block content %}
+                {% endblock %}
             </div>
+
         </div>
-        {% block content %}
-        {% endblock %}
+        
 
         <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     </body>
