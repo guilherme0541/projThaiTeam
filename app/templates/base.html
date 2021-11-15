@@ -9,6 +9,7 @@
         <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">       
 
         <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+       
     </head>
     <body>
         <div class="sidebar">
@@ -26,7 +27,7 @@
                       <span class="tooltip">Search</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('aluno.listAlunos') }}">
                         <i class='bx bxs-user-check'>
                             <span class="links_name">Aluno</span>
                         </i>                        
@@ -34,7 +35,7 @@
                     <span class="tooltip">Aluno</span>
                 </li>
                 <li>
-                    <a href="#">                                               
+                    <a href="{{ url_for('instrutor.listInstrutores') }}">                                               
                         <i class='bx bxs-graduation'>
                             <span class="links_name">Instrutores</span>
                         </i>                        
@@ -50,7 +51,7 @@
                     <span class="tooltip">Modalidade</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('pagamento.listPagamentos') }}">
                         <i class='bx bx-dollar' >
                             <span class="links_name">Pagamentos</span>
                         </i>                        
@@ -58,7 +59,7 @@
                     <span class="tooltip">Pagamentos</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('plano.listPlanos') }}">
                         <i class='bx bx-task' >
                             <span class="links_name">Planos</span>
                         </i>                        
@@ -66,7 +67,7 @@
                     <span class="tooltip">Planos</span>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('relatorio.listRelatorios') }}">
                         <i class='bx bxs-report' >
                             <span class="links_name">Relatórios</span>
                         </i>                        
@@ -74,7 +75,7 @@
                     <span class="tooltip">Relatórios</span>
                 </li>               
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('configuracao.listConfiguracoes') }}">
                         <i class='bx bx-cog' >
                             <span class="links_name">Configuração</span>
                         </i>                        
@@ -100,10 +101,13 @@
         </div>
         <div class="home_content">
             {% block content %}
-        {% endblock %}            
+            {% endblock %}            
         </div>
 
         <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/jquery.mask.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/moment.js') }}"></script>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>       
     </body>
 </html>
