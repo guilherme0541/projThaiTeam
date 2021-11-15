@@ -1,57 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Gerenciamento de Acadêmias</title>
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">       
 
         <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     </head>
     <body>
-        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="{{ url_for('usuario.home') }}">Portal Web</a>
-            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-nav px-3">
-                <a class="nav-link" href="{{ url_for('usuario.logout') }}">Logout</a>
+        <div class="sidebar">
+            <div class="logo_content">
+                <div class="logo">
+                    <i class='bx bxl-python'></i>
+                    <div class="logo_name">Menu</div>
+                </div>
+                <i class='bx bx-menu' id="btn"></i>
             </div>
-        </header>
-        <!-- navbar  -->
-        <div class="container-fluid">
-            <div class="row">
-                <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-                    <div class="position-sticky pt-3">
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">
-                                    <span class="fa fa-shopping-cart">Alunos</span>  
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">
-                                    <span class="fa fa-shopping-cart">Instrutores</span>  
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="{{ url_for('modalidade.listModalidades') }}">
-                                    <span class="fa fa-shopping-cart">Modalidades</span>  
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">
-                                    <span class="fa fa-shopping-cart">Planos</span>  
-                                </a>
-                            </li>
-                        </ul>
+            <ul class="nav_list">
+                <li>                   
+                    <i class='bx bx-search' ></i>
+                    <input type="text" placeholder="Search...">
+                      <span class="tooltip">Search</span>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class='bx bxs-user-check'>
+                            <span class="links_name">Aluno</span>
+                        </i>                        
+                    </a>
+                    <span class="tooltip">Aluno</span>
+                </li>
+                <li>
+                    <a href="#">                                               
+                        <i class='bx bxs-graduation'>
+                            <span class="links_name">Instrutores</span>
+                        </i>                        
+                    </a>
+                    <span class="tooltip">Instrutores</span>
+                </li>
+                <li>
+                    <a href="{{ url_for('modalidade.listModalidades') }}">
+                        <i class='bx bx-run'>
+                            <span class="links_name">Modalidade</span>
+                        </i>                        
+                    </a>
+                    <span class="tooltip">Modalidade</span>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class='bx bx-dollar' >
+                            <span class="links_name">Pagamentos</span>
+                        </i>                        
+                    </a>
+                    <span class="tooltip">Pagamentos</span>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class='bx bx-task' >
+                            <span class="links_name">Planos</span>
+                        </i>                        
+                    </a>
+                    <span class="tooltip">Planos</span>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class='bx bxs-report' >
+                            <span class="links_name">Relatórios</span>
+                        </i>                        
+                    </a>
+                    <span class="tooltip">Relatórios</span>
+                </li>               
+                <li>
+                    <a href="#">
+                        <i class='bx bx-cog' >
+                            <span class="links_name">Configuração</span>
+                        </i>                        
+                    </a>
+                    <span class="tooltip">Configuração</span>
+                </li>
+            </ul>
+            <div class="profile_content">
+                <div class="profile">
+                    <div class="profile_details">
+                        <img src="{{ url_for('static',filename='/'.join(['img', 'profile.jpg']))}}" alt="">
+                        <div class="name_job">
+                            <div class="name">Admin</div>
+                            <div class="job">Administrador</div>
+                        </div>
                     </div>
-                </nav>
+                    <a href="{{ url_for('usuario.logout') }}">
+                        <i class='bx bx-log-out' id="log_out" ></i>
+                    </a>
+                    
+                </div>
             </div>
         </div>
-        {% block content %}
-        {% endblock %}
+        <div class="home_content">
+            {% block content %}
+        {% endblock %}            
+        </div>
 
         <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>       
     </body>
 </html>
