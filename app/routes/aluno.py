@@ -4,7 +4,7 @@ from flask.helpers import flash
 from ..extentions.database import mongo
 from ..models.aluno import Aluno
 
-aluno = Blueprint('aluno', __name__)
+aluno = Blueprint('aluno', __name__, url_prefix="/aluno")
 
 @aluno.route('/list')
 def listAlunos():
@@ -71,5 +71,5 @@ def deleteAluno():
         flash("Campo 'idAluno' é obrigatório")
     else:
         mongo.db.alunos.delete_one({"_id": ObjectId(idAluno)})
-        flash("Aluno excluida com sucesso")
+        flash("Aluno excluido com sucesso")
     return redirect(url_for("aluno.listAlunos"))

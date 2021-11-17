@@ -139,6 +139,12 @@
                     </div>
                 </div>
 
+            </main>
+            
+            
+            {% endblock %}
+
+            {% block scripts %}
                 <script>
                     var excluirModal = document.getElementById('excluirModal');
                     excluirModal.addEventListener('show.bs.modal', function (event) {
@@ -209,7 +215,5 @@
                     
                 </script>
                 {% endif %}
-            </main>
-        
-    
-{% endblock %}
+
+            {% endblock %}
