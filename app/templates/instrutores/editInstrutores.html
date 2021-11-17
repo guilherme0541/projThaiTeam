@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+        <div class="container-fluid">
+            <div class="row">
+
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Alterar Instrutor</h1>
+                    </div>
+
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-success" role="alert">
+                                  {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form action="{{ url_for('instrutor.editInstrutor') }}" method="post">
+                        <input type="hidden" name="idInstrutor" value="{{ instrutor[0]['_id'] }}" id="idInstrutor" class="form-control" placeholder="Id do Instrutor" required>
+
+                        <label for="nomeInstrutor" class="visually-hidden">Nome:</label>
+                        <input type="text" name="nomeInstrutor" value="{{ instrutor[0]['nomeInstrutor'] }}" id="nomeInstrutor" class="form-control" placeholder="Nome Instrutor" required autofocus>
+                        
+                        <label for="enderecoInstrutor" class="visually-hidden">Endereço:</label>
+                        <input type="text" name="enderecoInstrutor" value="{{ instrutor[0]['enderecoInstrutor'] }}" id="enderecoInstrutor" class="form-control" placeholder="Endereço Instrutor" required autofocus>
+                        
+                        <label for="contatoInstrutor" class="visually-hidden">Endereço:</label>
+                        <input type="text" name="contatoInstrutor" value="{{ instrutor[0]['contatoInstrutor'] }}" id="contatoInstrutor" class="form-control" placeholder="Contato Instrutor" required autofocus>
+                        
+                        <label for="dataAdmissao" class="visually-hidden">Data Admissão:</label>
+                         <input type="text" name="dataAdmissao" value="{{ instrutor[0]['dataAdmissao'] }}" id="dataAdmissao" class="form-control" placeholder="Data Admissão" required autofocus>
+                                              
+                        <button class="w-100 btn btn-lg btn-primary" type="submit">Salvar</button>
+                    </form>
+                </main>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container-fluid">
+        <!-- <div class="row"> -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Instrutores Cadastrados</h1>
+                </div>
+                <div class="table-responsive">
+
+                    {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                    {% endfor %} {% endif %} {% endwith %}
+
+                    <a href="{{ url_for('instrutor.insertInstrutor') }}" class="btn btn-dark">Cadastrar Novo instrutor</a>
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Endereço</th>
+                                <th>Contato</th>
+                                <th>Data Admissão</th>                                
+                                <th>Editar</th>
+                                <th>Excluir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for instrutor in instrutores %}
+                            <tr>
+                                <td> {{ instrutor['nomeInstrutor'] }} </td>
+                                <td> {{ instrutor['enderecoInstrutor'] }} </td>
+                                <td> {{ instrutor['contatoInstrutor'] }} </td>  
+                                <td> {{ instrutor['dataAdmissao'] }} </td>                               
+                                <td><a href="{{ url_for('instrutor.editInstrutor', idInstrutor=instrutor['_id']) }}">Editar</a></td>
+                                <td><a href="{{ url_for('instrutor.deleteInstrutor', idInstrutor=instrutor['_id']) }}">Excluir</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        <!-- </div> -->
+    </div>
+{% endblock %}
