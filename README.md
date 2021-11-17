@@ -22,4 +22,4 @@ Agora você está pronto para:
 ```
 flask run
 ```
-Agora o App está acessível em localhost:5000
+O App está acessível em localhost:5000
