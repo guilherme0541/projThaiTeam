@@ -5,6 +5,6 @@ from ..extentions.database import mongo
 
 plano = Blueprint('plano', __name__)
 
-@plano.route('/home')
+@plano.route('/homePlanos')
 def listPlanos():
     return render_template("planos/list.html")

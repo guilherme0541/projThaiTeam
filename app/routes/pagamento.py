@@ -5,6 +5,6 @@ from ..extentions.database import mongo
 
 pagamento = Blueprint('pagamento', __name__)
 
-@pagamento.route('/home')
+@pagamento.route('/homePahamento')
 def listPagamentos():
     return render_template("pagamentos/list.html")
