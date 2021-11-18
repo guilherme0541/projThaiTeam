@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+        <div class="container-fluid">
+            <div class="row">
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Adicionar Nova Modalidade</h1>
+                    </div>
+
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-warning" role="alert">
+                                  {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form action="{{ url_for('modalidade.insertModalidade') }}" method="post">
+                        <label for="descricao" class="visually-hidden">Descrição:</label>
+                        <input type="text" name=descricao id="descricao" class="form-control" placeholder="Descrição Modalidade" required autofocus>
+                        
+                        <label for="valorMensalidade" class="visually-hidden">Valor Mensalidade:</label>
+                        <input type="text" data-type="currency" name=valorMensalidade id="valorMensalidade" class="form-control" placeholder="Valor Mensalidade" required>
+
+                        <label for="categoria" class="visually-hidden">Categoria</label>
+                        <select class="form-select" name="categoria" id="categoria">
+                            <option value="Placeholder" selected disabled>Selecione uma categoria</option>
+                            <option value="ArteMarcial">Arte Marcial</option>
+                            <option value="Natacao">Natação</option>
+                            <option value="Musculacao">Musculação</option>
+                            <option value="TreinoAerobico">Treino Aeróbico</option>
+                        </select>
+                        <button class="w-100 btn btn-lg btn-primary" type="submit">Adicionar</button>
+                    </form>
+                </main>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+        <div class="container-fluid">
+            <div class="row">
+
+                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Adicionar Novo Instrutor</h1>
+                    </div>
+
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-warning" role="alert">
+                                  {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form action="{{ url_for('instrutor.insertInstrutor') }}" method="post">
+                        <label for="nomeInstrutor" class="visually-hidden">Nome:</label>
+                        <input type="text" name=nomeInstrutor id="nomeInstrutor" class="form-control" placeholder="Nome do Instrutor" required autofocus>
+                        
+                        <label for="enderecoInstrutor" class="visually-hidden">Endereço:</label>
+                        <input type="text" data-type="currency" name=enderecoInstrutor id="enderecoInstrutor" class="form-control" placeholder="Endereço" required>
+
+                        <label for="contatoInstrutor" class="visually-hidden">Endereço:</label>
+                        <input type="text" data-type="currency" name=contatoInstrutor id="contatoInstrutor" class="form-control" placeholder="Contato" required>
+                        
+                        <label for="dataAdmissao" class="visually-hidden">Data Admissão:</label>
+                        <input type="date" data-date="" data-data-format="DD MM YYYY" data-type="currency" name=dataAdmissao id="dataAdmissao" class="form-control" placeholder="Data Admissão" required>
+                      
+                        <button class="w-100 btn btn-lg btn-primary" type="submit">Adicionar</button>
+                    </form>
+                </main>
+            </div>
+        </div>
+{% endblock %}

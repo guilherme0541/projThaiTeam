@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+{% block content %}
+    
+        
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Alunos </h1>
+                </div>
+            
+
+                {% with messages = get_flashed_messages(category_filter=["info"]) %}
+                {% if messages %}
+                {% for msg in messages %}
+                <div class="alert alert-info" role="alert">
+                    {{ msg }}
+                </div >
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+
+                <div class="mb-3">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novoModal" data-bs-title="Novo Aluno" data-bs-plano="1" data-bs-ativo="on">Novo Aluno</button>
+                </div>
+                <div class="table-responsive">
+
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>CPF</th>
+                                <th>Endereço</th>                                
+                                <th>Plano</th>
+                                <th>Status</th>
+                                <th>opções</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for aluno in alunos %}
+                            <tr>
+                                <td> {{ aluno['nome'] }} </td>
+                                <td> {{ aluno['cpf'] }} </td>
+                                <td> {{ aluno['endereco'] }} </td>                                
+                                <td>{{ aluno['plano'] }}</td>
+                                <td>{% if aluno['ativo'] %} Ativo {% else %} Inativo {% endif %} </td>
+                                <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#novoModal" data-bs-title="Editar Aluno" 
+                                    data-bs-id="{{ aluno['_id'] }}" data-bs-nome="{{ aluno['nome'] }}" data-bs-cpf="{{ aluno['cpf'] }}" data-bs-endereco="{{ aluno['endereco'] }}" data-bs-plano="{{ aluno['plano'] }}" data-bs-ativo="{{aluno['ativo']}}">Editar</button>
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#excluirModal"  data-bs-id="{{aluno['_id']}}">Excluir</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal para criar/editar aluno -->
+                <div class="modal fade " id="novoModal" tabindex="-1" aria-labelledby="novoModalLabel" aria-hidden="true"> 
+                
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title" id="novoModalLabel">Novo Aluno</h3>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="erroralerts">
+                                    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+                                    {% if errors %}
+                                    {% for error in errors %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                        </symbol>
+                                    </svg>
+                                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                                        <div>
+                                            {{ error }}
+                                        </div>
+                                    </div >
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% endwith %}
+                                </div>
+
+                                <form action="{{ url_for('aluno.saveAluno') }}" method="post">
+                                    <input type="hidden" id="idAluno" name="idAluno"  value="{% if aluno %}{{aluno['id']}}{% endif %}" >
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="nome" name="nome" placeholder="nome" {% if aluno %} value="{{aluno['nome']}}" {% endif %}>
+                                        <label for="nome">Nome</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="cpf" name="cpf" placeholder="cpf" {% if aluno %} value="{{aluno['cpf']}}" {% endif %}>
+                                        <label for="cpf">CPF</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Endereço" {% if aluno %} value="{{aluno['endereco']}}" {% endif %}>
+                                        <label for="endereco">Endereço</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="plano" name="plano" aria-label="Floating label select novo" {% if aluno %} value="{{aluno['plano']}}" {% endif %}>
+                                          <option value="1">One</option>
+                                          <option value="2">Two</option>
+                                          <option value="3">Three</option>
+                                        </select>
+                                        <label for="plano">Plano</label>
+                                    </div>
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="ativo" name="ativo" {% if (not aluno) or (aluno and (aluno['ativo'] ))   %} checked {% endif %}>
+                                        <label class="form-check-label" for="flexSwitchCheckChecked"> Ativo</label>
+                                    </div>
+                                    
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-danger" type="submit">Salvar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal para excluir aluno -->
+                <div class="modal fade" id="excluirModal" tabindex="-1" aria-labelledby="excluirModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="excluirModalLabel">Excluir Aluno</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        <p>Você está prestes a excluir um aluno. Essa ação é irreversível!</p>
+                        <p>Deseja continuar?</p>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Não</button>
+                        <a id="btnExcluir" type="button" class="btn btn-danger"  href="#">Sim</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+            </main>
+            
+            
+            {% endblock %}
+
+            {% block scripts %}
+                <script>
+                    var excluirModal = document.getElementById('excluirModal');
+                    excluirModal.addEventListener('show.bs.modal', function (event) {
+                    // Button that triggered the modal
+                    var button = event.relatedTarget;
+
+                    // Extract info from data-bs-* attributes
+                    var id = button.getAttribute('data-bs-id');
+
+                    // Update the modal's content.
+                    var btnExcluir = excluirModal.querySelector('#btnExcluir');
+                    btnExcluir.href = "{{ url_for('aluno.deleteAluno') }}?idAluno="+id;
+                    });
+
+                    var novoModal = document.getElementById('novoModal');
+                    novoModal.addEventListener('show.bs.modal', function (event) {
+                    // Button that triggered the modal
+                    var button = event.relatedTarget;
+                    if (button) {
+                        var alerta = document.getElementById('erroralerts');
+                        alerta.hidden = true;
+                                            
+                        // Extract info from data-bs-* attributes
+                        var title = button.getAttribute('data-bs-title');
+                        var id = button.getAttribute('data-bs-id');
+                        var nome = button.getAttribute('data-bs-nome');
+                        var cpf = button.getAttribute('data-bs-cpf');
+                        var endereco = button.getAttribute('data-bs-endereco');
+                        var plano = button.getAttribute('data-bs-plano');
+                        var ativo = button.getAttribute('data-bs-ativo');
+                        
+                        // Update the modal's content.
+                        var modalTitle = novoModal.querySelector('.modal-title');
+                        var idInput = novoModal.querySelector('#idAluno');
+                        var inputNome = novoModal.querySelector('#nome');
+                        var cpfInput = novoModal.querySelector('#cpf');
+                        var enderecoInput = novoModal.querySelector('#endereco');
+                        var planoInput = novoModal.querySelector('#plano');
+                        var ativoInput = novoModal.querySelector('#ativo');
+
+                        modalTitle.textContent =  title;
+                        idInput.value = id;
+                        inputNome.value = nome;
+                        cpfInput.value = cpf;
+                        enderecoInput.value = endereco;
+                        planoInput.value = plano;
+                        if (ativo == "on") {
+                            ativoInput.checked = true;
+                        } else {
+                            ativoInput.checked = false;
+                        }
+                    } else {
+                        var modalTitle = novoModal.querySelector('.modal-title');
+                        var idInput = novoModal.querySelector('#idAluno');
+                        if (idInput.value) {
+                            modalTitle.textContent = "Editar Aluno"
+                        } else {
+                            modalTitle.textContent = "Novo Aluno"
+                        }
+                    }
+                    });
+                </script>
+                {% if aluno %}
+                <script>
+                    $(document).ready(function () {
+                        $('#novoModal').modal('show')
+                    });
+                    
+                </script>
+                {% endif %}
+
+            {% endblock %}
