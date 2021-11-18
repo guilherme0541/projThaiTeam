@@ -9,7 +9,6 @@
         <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">       
 
         <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-       
     </head>
     <body>
         <div class="sidebar">
@@ -98,6 +97,7 @@
                     
                 </div>
             </div>
+
         </div>
         <div class="home_content">
             {% block content %}
@@ -108,6 +108,10 @@
         <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/jquery.mask.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/moment.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/script.js') }}"></script>       
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>     
+        
+        {% block scripts %} 
+        {% endblock %} 
+        
     </body>
 </html>
