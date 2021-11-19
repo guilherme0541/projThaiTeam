@@ -94,12 +94,34 @@
                                         </select>
                                         <label for="aluno">Aluno</label>
                                     </div>
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="mesRef" name="mesRef" placeholder="mesRef" {% if pagamento %} value="{{pagamento['mesRef']}}" {% endif %}>
+                                    <div class="form-group mb-3">
+                                        <input type="hidden" id="mesRef" name="mesRef">
                                         <label for="aluno">Mês de Referência</label>
+                                        <div class="input-group">
+                                            <select class="form-select" id="mes" name="mes" aria-label="Floating label select novo" placeholder="Mês">
+                                                <option value="01">Janeiro</option>
+                                                <option value="02">Fevereiro</option>
+                                                <option value="03">Março</option>
+                                                <option value="04">Abril</option>
+                                                <option value="05">Maio</option>
+                                                <option value="06">Junho</option>
+                                                <option value="07">Julho</option>
+                                                <option value="08">Agosto</option>
+                                                <option value="09">Setembro</option>
+                                                <option value="10">Outubro</option>
+                                                <option value="11">Novembro</option>
+                                                <option value="12">Dezembro</option>
+                                              </select>
+                                              <select class="form-select" id="ano" name="ano" aria-label="Floating label select novo" placeholder="Ano" value="2021">
+                                                {% for n in range(2015, 2100) %}    
+                                                <option value="{{n}}">{{n}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="dataPagamento" name="dataPagamento" placeholder="dataPagamento" {% if pagamento %} value="{{pagamento['dataPagamento']}}" {% endif %}>
+                                        <input type="hidden" id="dataPagamento" name="dataPagamento">
+                                        <input type="text" class="form-control" id="datePickerDataPagamento" name="datePickerDataPagamento" placeholder="dataPagamento" {% if pagamento %} value="{{pagamento['dataPagamento']}}" {% endif %}>
                                         <label for="dataPagamento">Data do Pagamento</label>
                                     </div>
                                     <div class="form-floating mb-3">
@@ -186,8 +208,11 @@
                         var modalTitle = novoModal.querySelector('.modal-title');
                         var idInput = novoModal.querySelector('#idPagamento');
                         var inputAluno= novoModal.querySelector('#aluno');
+                        var mesInput = novoModal.querySelector('#mes');
+                        var anoInput =novoModal.querySelector('#ano');
                         var mesRefInput = novoModal.querySelector('#mesRef');
-                        var dataPagamentoInput = novoModal.querySelector('#dataPagamento');
+                        var dataPagamentoInput = novoModal.querySelector("#dataPagamento" );
+                        var datePickerDataPagamentoInput = novoModal.querySelector("#datePickerDataPagamento" );
                         var valorPagoInput = novoModal.querySelector('#valorPago');
                         var tipoInput = novoModal.querySelector('#tipo');
 
@@ -195,8 +220,11 @@
                         idInput.value = id;
                         inputAluno.value = aluno;
                         dataPagamentoInput.value = dataPagamento;
+                        datePickerDataPagamentoInput.value = dataPagamento;
                         valorPagoInput.value = valorPago;
                         tipoInput.value = tipo;
+                        mesInput.value = mesRef.substring(0, 2);
+                        anoInput.value = mesRef.substring(3);
                         mesRefInput.value = mesRef;
                     } else {
                         var modalTitle = novoModal.querySelector('.modal-title');
@@ -209,6 +237,8 @@
                     }
                     });
                 </script>
+                <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+                <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
                 {% if pagamento %}
                 <script>
                     $(document).ready(function () {
@@ -217,5 +247,29 @@
                     
                 </script>
                 {% endif %}
+                <script>
+                        $(document).ready(function(){
+                            $('#mesRef').val($('#mes').val() + "-" + $('#ano').val());
+                        });
+                        $(function () {
+                            $('#mes').change(function () {
+                                $('#mesRef').val($('#mes').val() + "-" + $('#ano').val());
+                            });
+                        });
+                        $(function () {
+                            $('#ano').change(function () {
+                                $('#mesRef').val($('#mes').val() + "-" + $('#ano').val());
+                            });
+                        });
 
+                        $(function () {
+                            $("#datePickerDataPagamento").datepicker({
+                                dateFormat: "dd/mm/yy",
+                                altField: "#dataPagamento",
+                                altFormat: "dd/mm/yy"
+                            });
+                        });
+
+                </script>
+                
             {% endblock %}
