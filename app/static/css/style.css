@@ -241,3 +241,7 @@ body{
     width: 100%;
     height: auto;
 }
+
+.ui-day-hide{
+    display: none;
+}
