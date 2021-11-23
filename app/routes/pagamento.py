@@ -1,3 +1,4 @@
+from datetime import datetime
 from ..models.pagamento import Pagamento
 from bson.objectid import ObjectId
 from flask import Blueprint, render_template, request, session, redirect, url_for
@@ -11,7 +12,7 @@ def listPagamentos():
     if "username" in session:
         pagamentos = mongo.db.pagamentos.find()
         alunos = mongo.db.alunos.find()
-        return render_template("pagamentos/list.html", pagamentos=pagamentos, alunos=alunos )
+        return render_template("pagamentos/list.html", pagamentos=pagamentos, alunos=alunos , mesRef=datetime.today().strftime('%m-%Y'), data=datetime.today().strftime('%d-%m-%Y'))
     else:
         return redirect(url_for("usuario.index"))
 

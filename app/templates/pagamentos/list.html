@@ -2,7 +2,7 @@
 {% block content %}
     
         
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="mx-sm-auto px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Pagamentos</h1>
                 </div>
@@ -19,7 +19,8 @@
                 {% endwith %}
 
                 <div class="mb-3">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novoModal" data-bs-title="Novo Pagamento" >Novo Pagamento</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novoModal" 
+                    data-bs-mesref="{{mesRef}}" data-bs-dpagamento="{{data}}" data-bs-title="Novo Pagamento" >Novo Pagamento</button>
                 </div>
                 <div class="table-responsive">
 
@@ -44,8 +45,14 @@
                                 <td>{{ pagamento['dataPagamento'] }}</td>
                                 <td>{{pagamento['valorPago'] }} </td>
                                 <td>{{pagamento['tipo'] }} </td>
-                                <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#novoModal" data-bs-title="Editar Pagamento" 
-                                    data-bs-id="{{ pagamento['_id'] }}" data-bs-aluno="{{ pagamento['aluno']['_id'] }}" data-bs-mesRef="{{ pagamento['mesRef'] }}" data-bs-dPagamento="{{ pagamento['dataPagamento'] }}" data-bs-valorPago="{{ pagamento['valorPago'] }}" data-bs-tipo="{{pagamento['tipo']}}">Editar</button>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#novoModal" data-bs-title="Editar Pagamento" 
+                                    data-bs-id="{{ pagamento['_id'] }}" data-bs-aluno="{{ pagamento['aluno']['_id'] }}" data-bs-mesref="{{ pagamento['mesRef'] }}" 
+                                    data-bs-dpagamento="{{ pagamento['dataPagamento'] }}" data-bs-plano="{{ pagamento['aluno']['plano']['descricao'] }}" 
+                                    data-bs-valorplano="{{ pagamento['aluno']['plano']['valor'] }}"
+                                    data-bs-valorpago="{{ pagamento['valorPago'] }}" data-bs-tipo="{{pagamento['tipo']}}">
+                                    Editar
+                                    </button>
                                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#excluirModal"  data-bs-id="{{pagamento['_id']}}">Excluir</button>
                                 </td>
                             </tr>
@@ -124,8 +131,18 @@
                                         <input type="text" class="form-control" id="datePickerDataPagamento" name="datePickerDataPagamento" placeholder="dataPagamento" {% if pagamento %} value="{{pagamento['dataPagamento']}}" {% endif %}>
                                         <label for="dataPagamento">Data do Pagamento</label>
                                     </div>
+                                    <div id="dadosPlano" class="input-group mb-3">
+                                        <span class="input-group-text">Plano</span>
+                                        <input type="text" id="plano" aria-label="plano" class="form-control" readonly {% if pagamento %} value="{{pagamento['aluno']['plano']['descricao']}}" {% endif %}>
+                                        <span class="input-group-text">Valor</span>
+                                        <input type="number" id="valorPlano" aria-label="valorPlano" class="form-control" readonly {% if pagamento %} value="{{pagamento['aluno']['plano']['valor']}}" {% endif %}>
+                                    </div>
                                     <div class="form-floating mb-3">
-                                        <input type="number" class="form-control" id="valorPago" name="valorPago" placeholder="Endereço" {% if pagamento %} value="{{pagamento['valorPago']}}" {% endif %}>
+                                        <input type="number" step="0.01" min="0" id="desconto" aria-label="desconto" class="form-control" {% if pagamento %} value="{{pagamento['aluno']['plano'][''] - pagamento['valorPago']}}" {% endif %}>
+                                        <label for="valorPago">Desconto</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="number" class="form-control" id="valorPago" name="valorPago" placeholder="Valor Pago" readonly {% if pagamento %} value="{{pagamento['valorPago']}}" {% endif %}>
                                         <label for="valorPago">Valor Pago</label>
                                     </div>
                                     <div class="form-floating mb-3">
@@ -199,9 +216,11 @@
                         var title = button.getAttribute('data-bs-title');
                         var id = button.getAttribute('data-bs-id');
                         var aluno = button.getAttribute('data-bs-aluno');
-                        var mesRef = button.getAttribute('data-bs-mesRef');
-                        var dataPagamento = button.getAttribute('data-bs-dPagamento');
-                        var valorPago = button.getAttribute('data-bs-valorPago');
+                        var mesRef = button.getAttribute('data-bs-mesref');
+                        var dataPagamento = button.getAttribute('data-bs-dpagamento');
+                        var plano = button.getAttribute('data-bs-plano');
+                        var valorPlano = button.getAttribute( 'data-bs-valorplano' );
+                        var valorPago = button.getAttribute('data-bs-valorpago');
                         var tipo = button.getAttribute('data-bs-tipo');
                         
                         // Update the modal's content.
@@ -213,6 +232,9 @@
                         var mesRefInput = novoModal.querySelector('#mesRef');
                         var dataPagamentoInput = novoModal.querySelector("#dataPagamento" );
                         var datePickerDataPagamentoInput = novoModal.querySelector("#datePickerDataPagamento" );
+                        var planoInput = novoModal.querySelector("#plano");
+                        var valorPlanoInput = novoModal.querySelector("#valorPlano");
+                        var descontoInput = novoModal.querySelector("#desconto");
                         var valorPagoInput = novoModal.querySelector('#valorPago');
                         var tipoInput = novoModal.querySelector('#tipo');
 
@@ -221,6 +243,9 @@
                         inputAluno.value = aluno;
                         dataPagamentoInput.value = dataPagamento;
                         datePickerDataPagamentoInput.value = dataPagamento;
+                        planoInput.value = plano;
+                        valorPlanoInput.value = valorPlano;
+                        descontoInput.value = valorPlano - valorPago;
                         valorPagoInput.value = valorPago;
                         tipoInput.value = tipo;
                         mesInput.value = mesRef.substring(0, 2);
@@ -248,18 +273,38 @@
                 </script>
                 {% endif %}
                 <script>
+                        function atualizarValorpago(){
+                                $('#valorPago').val(($('#valorPlano').val() - $('#desconto').val()).toFixed(2));
+                                if($('#valorPago').val()<0){
+                                    $('#desconto').val($('#desconto').val() + $('#valorPago'));
+                                    atualizarValorpago();
+                                }
+                                if ($('#desconto').val()<0) {
+                                    $('#desconto').val(0);
+                                    atualizarValorpago();
+                                }
+                            }
                         $(document).ready(function(){
                             $('#mesRef').val($('#mes').val() + "-" + $('#ano').val());
+                            atualizarValorpago;
                         });
                         $(function () {
+                            $('#aluno').change(function(){
+                                $('#dadosPlano').load("{{ url_for('aluno.getPlano') }}?id="+$('#aluno').val() , function (responseTxt, statusTxt, xhr) {
+                                    console.log(statusTxt);
+                                    if(statusTxt == "success")
+                                        atualizarValorpago();
+                                });
+                            });
                             $('#mes').change(function () {
                                 $('#mesRef').val($('#mes').val() + "-" + $('#ano').val());
                             });
-                        });
-                        $(function () {
                             $('#ano').change(function () {
                                 $('#mesRef').val($('#mes').val() + "-" + $('#ano').val());
                             });
+                            $('#valorPlano').change(atualizarValorpago);
+                            $('#desconto').change(atualizarValorpago);
+                           
                         });
 
                         $(function () {

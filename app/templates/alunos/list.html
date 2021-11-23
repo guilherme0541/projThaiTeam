@@ -2,7 +2,7 @@
 {% block content %}
     
         
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <main class="mx-sm-auto px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Alunos </h1>
                 </div>
@@ -40,7 +40,7 @@
                                 <td> {{ aluno['nome'] }} </td>
                                 <td> {{ aluno['cpf'] }} </td>
                                 <td> {{ aluno['endereco'] }} </td>                                
-                                <td>{{ aluno['plano'] }}</td>
+                                <td>{{ aluno['plano']['descricao'] }}</td>
                                 <td>{% if aluno['ativo'] %} Ativo {% else %} Inativo {% endif %} </td>
                                 <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#novoModal" data-bs-title="Editar Aluno" 
                                     data-bs-id="{{ aluno['_id'] }}" data-bs-nome="{{ aluno['nome'] }}" data-bs-cpf="{{ aluno['cpf'] }}" data-bs-endereco="{{ aluno['endereco'] }}" data-bs-plano="{{ aluno['plano'] }}" data-bs-ativo="{{aluno['ativo']}}">Editar</button>
@@ -98,9 +98,9 @@
                                     </div>
                                     <div class="form-floating mb-3">
                                         <select class="form-select" id="plano" name="plano" aria-label="Floating label select novo" {% if aluno %} value="{{aluno['plano']}}" {% endif %}>
-                                          <option value="1">One</option>
-                                          <option value="2">Two</option>
-                                          <option value="3">Three</option>
+                                            {% for p in planos%}
+                                            <option value="{{p['_id']}}">{{p['descricao']}}</option>
+                                            {% endfor %}
                                         </select>
                                         <label for="plano">Plano</label>
                                     </div>
