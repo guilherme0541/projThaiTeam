@@ -1,0 +1,6 @@
+<div id="dadosPlano" class="input-group mb-3">
+    <span class="input-group-text">Plano</span>
+    <input type="text" id="plano" aria-label="plano" class="form-control" readonly {% if plano %} value="{{plano['descricao']}}" {% endif %}>
+    <span class="input-group-text">Valor</span>
+    <input type="number" id="valorPlano" aria-label="valorPlano" class="form-control" readonly {% if plano %} value="{{plano['valor']}}" {% endif %}>
+</div>

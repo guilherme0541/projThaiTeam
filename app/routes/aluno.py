@@ -10,9 +10,15 @@ aluno = Blueprint('aluno', __name__, url_prefix="/aluno")
 def listAlunos():
     if "username" in session:
         alunos = mongo.db.alunos.find()
-        return render_template("alunos/list.html", alunos=alunos)
+        planos = mongo.db.planos.find()
+        return render_template("alunos/list.html", alunos=alunos , planos = planos)
     else:
         return redirect(url_for("usuario.index"))
+
+@aluno.route('/plano')
+def getPlano():
+    aluno = mongo.db.alunos.find_one({"_id": ObjectId(request.values.get("id"))})
+    return render_template("alunos/plano.html", plano=aluno["plano"])
 
 @aluno.route('/edit', methods=[ 'POST'])
 def saveAluno():
@@ -20,8 +26,9 @@ def saveAluno():
         nome = request.form.get("nome")
         cpf = request.form.get("cpf")
         endereco = request.form.get("endereco")
-        plano = request.form.get("plano")
+        plano = mongo.db.planos.find_one({"_id": ObjectId(request.form.get("plano"))})
         ativo = request.form.get("ativo")
+
         hasError = False
 
         if not nome:
@@ -40,7 +47,8 @@ def saveAluno():
         if hasError:
             alunoToSave = Aluno(idAluno,  nome, cpf, endereco, plano, ativo)
             alunos = mongo.db.alunos.find()
-            return render_template("alunos/list.html", alunos=alunos, aluno=alunoToSave)
+            planos = mongo.db.planos.find()
+            return render_template("alunos/list.html", alunos=alunos, aluno=alunoToSave , planos = planos)
 
         if not idAluno:
              mongo.db.alunos.insert_one({
