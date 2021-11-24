@@ -1,6 +1,7 @@
 from bson.objectid import ObjectId
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from flask.helpers import flash
+from validate_docbr import CPF
 from ..extentions.database import mongo
 from ..models.aluno import Aluno
 
@@ -30,12 +31,13 @@ def saveAluno():
         ativo = request.form.get("ativo")
 
         hasError = False
+        validaCpf = CPF(repeated_digits = False)
 
         if not nome:
             flash("Campo 'nome' é obrigatório", "error")
             hasError = True
-        if not cpf:
-            flash("Campo 'cpf' é obrigatório", "error")
+        if not validaCpf.validate(cpf):
+            flash("Campo 'cpf' inválido", "error")
             hasError = True
         if not endereco:
             flash("Campo 'endereço' é obrigatório", "error")  
