@@ -56,9 +56,12 @@ def deletePlano():
     if not idPlano:
         flash("O campo 'idPlano' é obrigatório")
     else:
-        planoToDelete = Plano.findById(idPlano)
-        planoToDelete.delete()
-        flash("Plano excluido com sucesso")
+        try:
+            planoToDelete = Plano.findById(idPlano)
+            planoToDelete.delete()
+            flash("Plano excluido com sucesso")
+        except:
+            flash("Não foi possível excluir plano. Um plano associado a um Aluno não pode ser excluído!")
     return redirect(url_for("plano.listPlanos"))
 
 
