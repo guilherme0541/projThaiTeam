@@ -1,7 +1,8 @@
 from bson.objectid import ObjectId
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from flask.helpers import flash
-from ..extentions.database import mongo
+
+from app.models.modalidade import Modalidade
 from ..models.plano import Plano
 
 plano = Blueprint('plano', __name__, url_prefix="/plano")
@@ -9,8 +10,8 @@ plano = Blueprint('plano', __name__, url_prefix="/plano")
 @plano.route('/listPlanos')
 def listPlanos():
     if "username" in session:
-        planos = mongo.db.planos.find()
-        modalidades = mongo.db.modalidades.find()       
+        planos = Plano.findAll()
+        modalidades = Modalidade.findAll()    
 
         return render_template("planos/listPlano.html", planos=planos, modalidades = modalidades)
     else:
@@ -23,7 +24,7 @@ def savePlano():
     descricao = request.form.get("descricao")
     valor = request.form.get("valor")
     descricaoModalidade = request.form.get("descModalidade")
-    ativo = request.form.get("ativo")
+    ativo = True if request.form.get("ativo") else False
 
     hasError = False
     if not descricao:
@@ -36,28 +37,16 @@ def savePlano():
         flash("Campo 'modalidade' é obrigatório", "error")
         hasError = True
     
+    planoToSave = Plano(descricao = descricao, valor = valor, descricaoModalidade = descricaoModalidade, ativo = ativo)
+    if idPlano:
+        planoToSave.id = idPlano
     if hasError:
-        planoToSave = Plano(idPlano, descricao, valor, descricaoModalidade, ativo)
-        planos = mongo.db.planos.find()
-        modalidades = mongo.db.modalidades.find()
+        planos = Plano.findAll()
+        modalidades = Modalidade.findAll()   
         return render_template("planos/listPlano.html", planos=planos, plano=planoToSave, modalidades=modalidades)
     
-    if not idPlano:
-        mongo.db.planos.insert_one({
-            "descricao": descricao,
-            "valor": valor,
-            "descricaoModalidade": descricaoModalidade,
-            "ativo": ativo
-        })
-    else:
-        mongo.db.planos.update({"_id": ObjectId(idPlano)},{
-            "$set":{
-                "descricao": descricao,
-                "valor": valor,
-                "descricaoModalidade": descricaoModalidade,
-                "ativo": ativo
-            }
-        })
+    planoToSave.save()
+
     flash("Plano salvo com sucesso", "info")
     return redirect(url_for("plano.listPlanos"))
 
@@ -67,8 +56,12 @@ def deletePlano():
     if not idPlano:
         flash("O campo 'idPlano' é obrigatório")
     else:
-        mongo.db.planos.delete_one({"_id": ObjectId(idPlano)})
-        flash("Plano excluido com sucesso")
+        try:
+            planoToDelete = Plano.findById(idPlano)
+            planoToDelete.delete()
+            flash("Plano excluido com sucesso")
+        except:
+            flash("Não foi possível excluir plano. Um plano associado a um Aluno não pode ser excluído!")
     return redirect(url_for("plano.listPlanos"))
 
 

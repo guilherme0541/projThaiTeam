@@ -43,8 +43,8 @@
                                 <td>{{ aluno['plano']['descricao'] }}</td>
                                 <td>{% if aluno['ativo'] %} Ativo {% else %} Inativo {% endif %} </td>
                                 <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#novoModal" data-bs-title="Editar Aluno" 
-                                    data-bs-id="{{ aluno['_id'] }}" data-bs-nome="{{ aluno['nome'] }}" data-bs-cpf="{{ aluno['cpf'] }}" data-bs-endereco="{{ aluno['endereco'] }}" data-bs-plano="{{ aluno['plano']['_id'] }}" data-bs-ativo="{{aluno['ativo']}}">Editar</button>
-                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#excluirModal"  data-bs-id="{{aluno['_id']}}">Excluir</button>
+                                    data-bs-id="{{ aluno['id'] }}" data-bs-nome="{{ aluno['nome'] }}" data-bs-cpf="{{ aluno['cpf'] }}" data-bs-endereco="{{ aluno['endereco'] }}" data-bs-plano="{{ aluno['plano']['id'] }}" data-bs-ativo="{{aluno['ativo']}}">Editar</button>
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#excluirModal"  data-bs-id="{{aluno['id']}}">Excluir</button>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -99,13 +99,13 @@
                                     <div class="form-floating mb-3">
                                         <select class="form-select" id="plano" name="plano" aria-label="Floating label select novo" {% if aluno %} value="{{aluno['plano']}}" {% endif %}>
                                             {% for p in planos%}
-                                            <option value="{{p['_id']}}">{{p['descricao']}}</option>
+                                            <option value="{{p['id']}}">{{p['descricao']}}</option>
                                             {% endfor %}
                                         </select>
                                         <label for="plano">Plano</label>
                                     </div>
                                     <div class="form-check form-switch mb-3">
-                                        <input class="form-check-input" type="checkbox" id="ativo" name="ativo" {% if (not aluno) or (aluno and (aluno['ativo'] ))   %} checked {% endif %}>
+                                        <input class="form-check-input" type="checkbox" id="ativo" name="ativo" {% if aluno%} checked="{{aluno['ativo']}}" {% endif %}>
                                         <label class="form-check-label" for="flexSwitchCheckChecked"> Ativo</label>
                                     </div>
                                     
@@ -191,7 +191,7 @@
                         cpfInput.value = cpf;
                         enderecoInput.value = endereco;
                         planoInput.value = plano;
-                        if (ativo == "on") {
+                        if (ativo == "True") {
                             ativoInput.checked = true;
                         } else {
                             ativoInput.checked = false;

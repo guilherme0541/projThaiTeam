@@ -29,12 +29,12 @@
                         <tbody>
                             {% for instrutor in instrutores %}
                             <tr>
-                                <td> {{ instrutor['nomeInstrutor'] }} </td>
-                                <td> {{ instrutor['enderecoInstrutor'] }} </td>
-                                <td> {{ instrutor['contatoInstrutor'] }} </td>  
+                                <td> {{ instrutor['nome'] }} </td>
+                                <td> {{ instrutor['endereco'] }} </td>
+                                <td> {{ instrutor['contato'] }} </td>  
                                 <td> {{ instrutor['dataAdmissao'] }} </td>                               
-                                <td><a href="{{ url_for('instrutor.editInstrutor', idInstrutor=instrutor['_id']) }}">Editar</a></td>
-                                <td><a href="{{ url_for('instrutor.deleteInstrutor', idInstrutor=instrutor['_id']) }}">Excluir</a></td>
+                                <td><a href="{{ url_for('instrutor.editInstrutor', idInstrutor=instrutor['id']) }}">Editar</a></td>
+                                <td><a href="{{ url_for('instrutor.deleteInstrutor', idInstrutor=instrutor['id']) }}">Excluir</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>

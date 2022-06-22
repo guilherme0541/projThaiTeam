@@ -10,7 +10,7 @@
             <select class="form-select" name="categoriaPlano" id="categoriaPlano">
                 <option value="Placeholder" selected disabled>Selecione uma categoria</option>
                 {% for mod in mods%}
-                <option value="{{mod['_id']}}">{{mod['descricao']}}</option>
+                <option value="{{mod['id']}}">{{mod['descricao']}}</option>
                 {% endfor %}
             </select>            
         </main>

@@ -1,14 +1,15 @@
 from bson.objectid import ObjectId
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from flask.helpers import flash
-from ..extentions.database import mongo
+
+from app.models.modalidade import Modalidade
 
 modalidade = Blueprint('modalidade', __name__)
 
 @modalidade.route('/list')
 def listModalidades():
     if "username" in session:
-        modalidades = mongo.db.modalidades.find()
+        modalidades = Modalidade.findAll()
         return render_template("modalidades/list.html", modalidades=modalidades)
     else:
         return redirect(url_for("usuario.index"))
@@ -29,11 +30,8 @@ def insertModalidade():
         elif not valorMensalidade:
             flash("Campo 'valorMensalidade' é obrigatório")
         else:
-            mongo.db.modalidades.insert_one({
-                "descricao": descricao,
-                "categoria": categoria,
-                "valorMensalidade": valorMensalidade
-            })
+            modalidadeToSave = Modalidade(descricao = descricao, categoria = categoria, valorMensalidade = valorMensalidade)
+            modalidadeToSave.save()
 
             flash("Categoria cadastrada com sucesso")
     return redirect(url_for("modalidade.listModalidades"))
@@ -47,12 +45,7 @@ def editModalidade():
             flash("Campo 'idModalidade' é obrigatório")
             return redirect(url_for("modalidade.listModalidades"))
         else:
-            idModalidadeAux = mongo.db.modalidades.find({"_id": ObjectId(idModalidade)})
-            modalidade = [prd for prd in idModalidadeAux]
-            categorias = set()
-            modalidades = mongo.db.modalidades.find()
-            for m in modalidades:
-                categorias.add(m['categoria'])
+            modalidade =  Modalidade.findById(idModalidade)
             return render_template("modalidades/edit.html", modalidade=modalidade)
     else:
         idModalidade = request.form.get("idmodalidade")
@@ -69,14 +62,9 @@ def editModalidade():
         elif not categoria:
             flash("Campo 'categoria' é obrigatório")
         else:
-            mongo.db.modalidades.update({"_id": ObjectId(idModalidade)},
-            {
-                "$set":{
-                    "descricao": descricao,
-                    "categoria": categoria,
-                    "valorMensalidade": valorMensalidade
-                }
-            })
+            modalidadeToSave = Modalidade(id = idModalidade, descricao = descricao, categoria = categoria, valorMensalidade = valorMensalidade)
+            modalidadeToSave.save()
+            
             flash("Modalidade alterada com sucesso")
         return redirect(url_for("modalidade.listModalidades"))
 
@@ -86,6 +74,7 @@ def deleteModalidade():
     if not idModalidade:
         flash("Campo 'idModalidade' é obrigatório")
     else:
-        mongo.db.modalidades.delete_one({"_id": ObjectId(idModalidade)})
+        modalidadeToDelete = Modalidade.findById(idModalidade)
+        modalidadeToDelete.delete()
         flash("Modalidade excluida com sucesso")
     return redirect(url_for("modalidade.listModalidades"))
