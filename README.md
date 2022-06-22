@@ -14,8 +14,14 @@ Crie um arquivo .env assim:
 ```
 FLASK_APP=app/app.py
 FLASK_ENV=development
-MONGO_URI="<String Connection mongo>/<database>"
 SECRET_KEY="secret key"
+DB_URI="bd://uriConexaoComOBanco"
+```
+
+Crie as tabelas no banco de dados (caso necessário) com:
+
+```
+Flask createDB
 ```
 
 Crie um usuário com:

@@ -9,7 +9,8 @@ from .routes.planos import plano
 from .routes.relatorio import relatorio
 from .routes.configuracao import configuracao
 
-from .extentions import database
+from .extentions import databaseMySQL
+from .extentions.databaseMySQL import db
 from .commands.userCommands import userCommands
 
 def create_app(config_object = "app.settings"):
@@ -25,7 +26,15 @@ def create_app(config_object = "app.settings"):
     app.register_blueprint(configuracao) 
 
     app.register_blueprint(userCommands)
-    database.init_app(app)
+    databaseMySQL.init_app(app)
+
+    @app.cli.command("createDB")
+    def create_db():
+        print("...apagando banco antigo...")
+        db.drop_all()
+        print("...criando banco...")
+        db.create_all()
+        print("...banco criado...")
+        
 
     return app
-

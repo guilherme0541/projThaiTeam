@@ -31,8 +31,8 @@
                                 <td> {{ modalidade['descricao'] }} </td>
                                 <td> {{ modalidade['categoria'] }} </td>
                                 <td> {{ modalidade['valorMensalidade'] }} </td>                                
-                                <td><a href="{{ url_for('modalidade.editModalidade', idModalidade=modalidade['_id']) }}">Editar</a></td>
-                                <td><a href="{{ url_for('modalidade.deleteModalidade', idModalidade=modalidade['_id']) }}">Excluir</a></td>
+                                <td><a href="{{ url_for('modalidade.editModalidade', idModalidade=modalidade['id']) }}">Editar</a></td>
+                                <td><a href="{{ url_for('modalidade.deleteModalidade', idModalidade=modalidade['id']) }}">Excluir</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>

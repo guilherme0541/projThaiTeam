@@ -1,45 +1,36 @@
 import click
 import getpass
-from ..extentions.database import mongo
 from werkzeug.security import generate_password_hash
 from flask import Blueprint, cli
+from app.models.user import User
 
 userCommands = Blueprint('user', __name__)
 
 @userCommands.cli.command("getUser")
 @click.argument("name")
 def get_user(name):
-    userCollection = mongo.db.users
-    user = [u for u in userCollection.find({"name": name})]
+    user = User.findByName(name)
 
 @userCommands.cli.command("addUser")
 @click.argument("name")
 def create_user(name):
-    userCollection = mongo.db.users
-    password = getpass.getpass()
-    user ={
-        "name": name,
-        "password": generate_password_hash(password) 
-    } 
-
-    userExists = userCollection.find_one({"name": name})
-    if userExists:
+    if User.findByName(name):
         print(f'Usuário {name} já existe')
     else:
-        userCollection.insert(user)
+        senha = getpass.getpass()
+        user = User(name = name, password = generate_password_hash(senha))
+        user.save()
         print('Usuário cadastrado com sucesso')
 
 @userCommands.cli.command("deleteUser")
 @click.argument("name")
 def delete_user(name):
-    userCollection = mongo.db.users
-
-    userExists = userCollection.find_one({"name": name})
-    if userExists:
+    user = User.findByName(name)
+    if user:
         question = input(f'Deseja realmente deletar o usuário {name}? (S/N)')
 
         if question.upper() == "S":
-            userCollection.delete_one({"name": name})
+            user.delete()
             print("Usuário deletado com sucesso!")
         else:
             exit()

@@ -19,13 +19,13 @@
                     {% endwith %}
 
                     <form action="{{ url_for('modalidade.editModalidade') }}" method="post">
-                        <input type="hidden" name="idmodalidade" value="{{ modalidade[0]['_id'] }}" id="idmodalidade" class="form-control" placeholder="Id do Modalidade" required>
+                        <input type="hidden" name="idmodalidade" value="{{ modalidade['id'] }}" id="idmodalidade" class="form-control" placeholder="Id do Modalidade" required>
 
                         <label for="descricao" class="visually-hidden">Nome:</label>
-                        <input type="text" name="descricao" value="{{ modalidade[0]['descricao'] }}" id="descricao" class="form-control" placeholder="Descrição da Modalidade" required autofocus>                       
+                        <input type="text" name="descricao" value="{{ modalidade['descricao'] }}" id="descricao" class="form-control" placeholder="Descrição da Modalidade" required autofocus>                       
                         
                         <label for="valorMensalidade" class="visually-hidden">Preco:</label>
-                        <input type="text" data-type="currency" name="valorMensalidade" value="{{ modalidade[0]['valorMensalidade'] }}" id="valorMensalidade" class="form-control" placeholder="Valor da Mensalidade" required autofocus>
+                        <input type="text" data-type="currency" name="valorMensalidade" value="{{ modalidade['valorMensalidade'] }}" id="valorMensalidade" class="form-control" placeholder="Valor da Mensalidade" required autofocus>
                         
                         <label for="categoria" class="visually-hidden">Categoria</label>
                         <select class="form-select" name="categoria" id="categoria">

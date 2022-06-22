@@ -39,7 +39,7 @@
                         <tbody>
                             {% for pagamento in pagamentos %}
                             <tr>
-                                <td> {{ pagamento['_id'] }} </td>
+                                <td> {{ pagamento['id'] }} </td>
                                 <td> {{ pagamento['aluno']['nome'] }} </td>
                                 <td> {{ pagamento['mesRef'] }} </td>                                
                                 <td>{{ pagamento['dataPagamento'] }}</td>
@@ -47,13 +47,13 @@
                                 <td>{{pagamento['tipo'] }} </td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#novoModal" data-bs-title="Editar Pagamento" 
-                                    data-bs-id="{{ pagamento['_id'] }}" data-bs-aluno="{{ pagamento['aluno']['_id'] }}" data-bs-mesref="{{ pagamento['mesRef'] }}" 
+                                    data-bs-id="{{ pagamento['id'] }}" data-bs-aluno="{{ pagamento['aluno']['cpf'] }}" data-bs-mesref="{{ pagamento['mesRef'] }}" 
                                     data-bs-dpagamento="{{ pagamento['dataPagamento'] }}" data-bs-plano="{{ pagamento['aluno']['plano']['descricao'] }}" 
                                     data-bs-valorplano="{{ pagamento['aluno']['plano']['valor'] }}"
                                     data-bs-valorpago="{{ pagamento['valorPago'] }}" data-bs-tipo="{{pagamento['tipo']}}">
                                     Editar
                                     </button>
-                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#excluirModal"  data-bs-id="{{pagamento['_id']}}">Excluir</button>
+                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#excluirModal"  data-bs-id="{{pagamento['id']}}">Excluir</button>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -94,9 +94,9 @@
                                 <form action="{{ url_for('pagamento.savePagamento') }}" method="post">
                                     <input type="hidden" id="idPagamento" name="idPagamento"  value="{% if pagamento %}{{pagamento['id']}}{% endif %}" >
                                     <div class="form-floating mb-3">
-                                        <select class="form-select" id="aluno" name="aluno" aria-label="Floating label select novo" {% if pagamento %} value="{{pagamento['aluno']['_id']}}" {% endif %}>
+                                        <select class="form-select" id="aluno" name="aluno" aria-label="Floating label select novo" {% if pagamento %} value="{{pagamento['aluno']['cpf']}}" {% endif %}>
                                         {% for aluno in alunos%}
-                                          <option value="{{aluno['_id']}}">{{aluno['nome']}}</option>
+                                          <option value="{{aluno['cpf']}}">{{aluno['nome']}}</option>
                                         {% endfor %}
                                         </select>
                                         <label for="aluno">Aluno</label>

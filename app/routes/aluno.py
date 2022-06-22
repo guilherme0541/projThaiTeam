@@ -1,8 +1,10 @@
 from bson.objectid import ObjectId
 from flask import Blueprint, render_template, request, session, redirect, url_for
 from flask.helpers import flash
+from sqlalchemy import null
 from validate_docbr import CPF
-from ..extentions.database import mongo
+
+from app.models.plano import Plano
 from ..models.aluno import Aluno
 
 aluno = Blueprint('aluno', __name__, url_prefix="/aluno")
@@ -10,25 +12,25 @@ aluno = Blueprint('aluno', __name__, url_prefix="/aluno")
 @aluno.route('/list')
 def listAlunos():
     if "username" in session:
-        alunos = mongo.db.alunos.find()
-        planos = mongo.db.planos.find()
-        return render_template("alunos/list.html", alunos=alunos , planos = planos)
+        alunos = Aluno.findAll()
+        planos = Plano.findAll()
+        return render_template("alunos/list.html", alunos = alunos , planos = planos)
     else:
         return redirect(url_for("usuario.index"))
 
 @aluno.route('/plano')
 def getPlano():
-    aluno = mongo.db.alunos.find_one({"_id": ObjectId(request.values.get("id"))})
-    return render_template("alunos/plano.html", plano=aluno["plano"])
+    aluno = Aluno.findByCPF(request.values.get("id"))
+    return render_template("alunos/plano.html", plano=aluno.plano)
 
 @aluno.route('/edit', methods=[ 'POST'])
 def saveAluno():
-        idAluno = request.form.get("idAluno")
+        idAluno = request.form.get("idAluno") 
         nome = request.form.get("nome")
         cpf = request.form.get("cpf")
         endereco = request.form.get("endereco")
-        plano = mongo.db.planos.find_one({"_id": ObjectId(request.form.get("plano"))})
-        ativo = request.form.get("ativo")
+        plano_id = request.form.get("plano")
+        ativo = True if request.form.get("ativo") else False
 
         hasError = False
         validaCpf = CPF(repeated_digits = False)
@@ -42,35 +44,21 @@ def saveAluno():
         if not endereco:
             flash("Campo 'endereço' é obrigatório", "error")  
             hasError = True
-        if not plano:
+        if not plano_id:
             flash("Campo 'plano' é obrigatório", "error")
             hasError = True
         
+        alunoToSave = Aluno(nome = nome, cpf = cpf, endereco = endereco, plano_id = plano_id, ativo = ativo)
+        if idAluno:
+            alunoToSave.id = idAluno
+
         if hasError:
-            alunoToSave = Aluno(idAluno,  nome, cpf, endereco, plano, ativo)
-            alunos = mongo.db.alunos.find()
-            planos = mongo.db.planos.find()
+            alunos = Aluno.findAll()
+            planos = Plano.findAll()
             return render_template("alunos/list.html", alunos=alunos, aluno=alunoToSave , planos = planos)
 
-        if not idAluno:
-             mongo.db.alunos.insert_one({
-                "nome": nome,
-                "cpf": cpf,
-                "endereco": endereco,
-                "plano" : plano,
-                "ativo" : ativo
-            })
-        else:
-            mongo.db.alunos.update({"_id": ObjectId(idAluno)},
-            {
-                "$set":{
-                    "nome": nome,
-                    "cpf": cpf,
-                    "endereco": endereco,
-                    "plano" : plano,
-                    "ativo" : ativo
-                }
-            })
+        alunoToSave.save()
+        
         flash("Aluno salvo com sucesso", "info")
         return redirect(url_for("aluno.listAlunos"))
 
@@ -80,6 +68,7 @@ def deleteAluno():
     if not idAluno:
         flash("Campo 'idAluno' é obrigatório")
     else:
-        mongo.db.alunos.delete_one({"_id": ObjectId(idAluno)})
+        alunoToDelete = Aluno.findById(idAluno)
+        alunoToDelete.delete()
         flash("Aluno excluido com sucesso")
     return redirect(url_for("aluno.listAlunos"))

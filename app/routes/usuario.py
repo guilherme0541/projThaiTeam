@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, session, redirect, url_for, request, flash
-from ..extentions.database import mongo
+# from ..extentions.database import mongo
 from werkzeug.security import check_password_hash
+from app.models.user import User
 
 usuario = Blueprint('usuario', __name__)
 
@@ -24,10 +25,10 @@ def login():
         username = request.form.get('usuario')
         password = request.form.get('senha')
 
-        userFound = mongo.db.users.find_one({"name": username})
+        userFound = User.findByName(username)
         if userFound:
-            validUser = userFound["name"]
-            validPassword = userFound["password"]
+            validUser = userFound.name
+            validPassword = userFound.password
             if check_password_hash(validPassword, password):
                 session["username"] = validUser
                 return redirect(url_for('usuario.home'))

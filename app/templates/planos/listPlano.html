@@ -36,15 +36,14 @@
                                 <td> {% if plano['ativo'] %} Ativo {% else %} Inativo {% endif %}</td>
                                 <td>
                                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#novoModal" data-bs-title="Editar Plano" 
-                                    data-bs-id="{{ plano['_id'] }}" data-bs-descricao="{{ plano['descricao'] }}" data-bs-valor="{{ plano['valor'] }}" data-bs-descModalidade="{{ plano['descricaoModalidade'] }}" data-bs-ativo="{{plano['ativo']}}">Editar</button>
-                                    <a class="btn btn-primary btn-sm" href="{{ url_for('plano.deletePlano', idPlano=plano['_id']) }}">Excluir</a>                                   
+                                    data-bs-id="{{ plano['id'] }}" data-bs-descricao="{{ plano['descricao'] }}" data-bs-valor="{{ plano['valor'] }}" data-bs-descModalidade="{{ plano['descricaoModalidade'] }}" data-bs-ativo="{{plano['ativo']}}">Editar</button>
+                                    <a class="btn btn-primary btn-sm" href="{{ url_for('plano.deletePlano', idPlano=plano['id']) }}">Excluir</a>                                   
                                 </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-            </main>
 
             <!-- Modal para criar/editar plano -->
             <div class="modal fade " id="novoModal" tabindex="-1" aria-labelledby="novoModalLabel" aria-hidden="true">
@@ -91,10 +90,10 @@
                                     <option value="{{modalidade['descricao']}}">{{modalidade['descricao']}}</option>
                                     {% endfor %}
                                 </select>
-                                <label for="plano">Plano</label>
+                                <label for="plano">Modalidade</label>
                             </div>
                             <div class="form-check form-switch mb-3">
-                                <input class="form-check-input" type="checkbox" id="ativo" name="ativo" {% if (not plano) or (plano and (plano['ativo'] ))   %} checked {% endif %}>
+                                <input class="form-check-input" type="checkbox" id="ativo" name="ativo" >
                                 <label class="form-check-label" for="flexSwitchCheckChecked"> Ativo</label>
                             </div>
                             <div class="modal-footer">
@@ -106,16 +105,13 @@
                         </div>
                     </div>
             </div>
+
+        </main>
 {% endblock %}
 
 {% block scripts %}
 <script>
 	
-	var button = event.relatedTarget;
-
-	// Extract info from data-bs-* attributes
-	var id = button.getAttribute('data-bs-id');
-
 	var novoModal = document.getElementById('novoModal');
 	novoModal.addEventListener('show.bs.modal', function (event) {
 	// Button that triggered the modal
@@ -145,8 +141,7 @@
 		inputDescricao.value = descricao;
 		valorInput.value = valor;
 		descModalidadeInput.value = descModalidade;
-		planoInput.value = plano;
-		if (ativo == "on") {
+		if (ativo == "True") {
 			ativoInput.checked = true;
 		} else {
 			ativoInput.checked = false;
@@ -162,7 +157,7 @@
 	}
 	});
 </script>
-{% if aluno %}
+{% if plano %}
 <script>
 	$(document).ready(function () {
 		$('#novoModal').modal('show')
